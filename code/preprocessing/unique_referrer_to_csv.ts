@@ -15,7 +15,7 @@ const ws = fs.createWriteStream(path.resolve(`../data/${filename}.csv`), {
 
 const stringifier = stringify({
     header: false,
-    columns: [ 'id', 'referrer_name' ]
+    columns: [ 'id', 'domain_name', 'referrer_name' ]
 });
 stringifier.pipe(ws);
 
