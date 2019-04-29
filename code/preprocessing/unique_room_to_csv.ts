@@ -1,9 +1,9 @@
 import path from 'path';
 import readline from 'readline';
 import fs from 'fs';
+import { stringify } from 'csv';
 
-// const filename = 'unique_referrer';
-const filename = 'unique_referrer';
+const filename = 'unique_room';
 
 const ifs = fs.createReadStream(path.resolve(`../data/${filename}.txt`), {
         encoding: 'utf-8'
@@ -13,8 +13,11 @@ const ws = fs.createWriteStream(path.resolve(`../data/${filename}.csv`), {
         encoding: 'utf-8'
 });
 
-// ws.write('"id", "domain_name", "referrer_name"\n');
-// ws.write('"id", "referrer_name"\r\n');
+const stringifier = stringify({
+    header: false,
+    columns: [ 'id', 'room_name' ]
+});
+stringifier.pipe(ws);
 
 const rl = readline.createInterface({
     input: ifs,
@@ -22,17 +25,10 @@ const rl = readline.createInterface({
 });
 
 let id = 1;
-let max = 0;
-rl.on('line', function(line) {
-    const split = line.split('/');
-    let domainName = '/';
-    if (split.length >= 3) {
-        domainName = split[2];
-    }
 
-    ws.write(`"${id}","${domainName}","${line}"`);
-    ws.write("\n");
+rl.on('line', function(line) {
+    stringifier.write([ id, line ]);
     id++;
 });
 
-rl.on('close', () => console.log(max));
+rl.on('close', () => { stringifier.end(); });
