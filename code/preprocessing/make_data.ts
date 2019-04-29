@@ -35,75 +35,79 @@ function uniqueFileToMap(path: string): Promise<Map<string, number>> {
     let tagSet: Map<string, number> = await uniqueFileToMap(path.resolve('../data/unique_tag.txt'));
     // let topicIdSet: Map<string, number> = await uniqueFileToMap(path.resolve('../data/unique_topicid.txt'));
 
-    const filename = 'ptlog_20181015';
-
-    const ifs = fs.createReadStream(path.resolve(`../data/${filename}.json`), {
-            encoding: 'utf-8'
+    let count = 1;
+    const ws = fs.createWriteStream(path.resolve(`../data/data.csv`), {
+        encoding: 'utf-8'
     });
-    
-    await new Promise(function(resolve, reject) {
 
-        const ws = fs.createWriteStream(path.resolve(`../data/${filename}_data.csv`), {
-            encoding: 'utf-8'
-        });
+    const stringifier = stringify({
+        header: false,
+        columns: [ 'id', 'topic_id', 'device', 'browser', 'os', 'referrer', 'tc', 'updated_time', 'mid', 'comment_id' ]
+    });
 
-        const stringifier = stringify({
-            header: false,
-            columns: [ 'id', 'topic_id', 'device', 'browser', 'os', 'referrer', 'tc', 'updated_time', 'mid', 'comment_id' ]
-        });
+    stringifier.pipe(ws);
 
-        stringifier.pipe(ws);
+    for (let i = 15; i <= 21; i++) {
+        const filename = `ptlog_201810${i}`;
+        console.log(filename);
+        await new Promise(function(resolve, reject) {
+            const ifs = fs.createReadStream(path.resolve(`../data/${filename}.json`), {
+                encoding: 'utf-8'
+            });
+            
+            let progress = 0;
+            const rl = readline.createInterface({
+                input: ifs,
+                terminal: false
+            });
 
-        let count = 1;
-        let progress = 0;
-        const rl = readline.createInterface({
-            input: ifs,
-            terminal: false
-        })
-        .on('line', line => {
-            try {
-                const json = eval(`(${line})`);
-                const {
-                    topic_id,
-                    comment_id,
-                    device,
-                    browser,
-                    os,
-                    referrer,
-                    rooms,
-                    tags,
-                    mid,
-                    tc,
-                    updated_time
-                } = json;
+            rl.on('line', line => {
+                try {
+                    const json = eval(`(${line})`);
+                    const {
+                        topic_id,
+                        comment_id,
+                        device,
+                        browser,
+                        os,
+                        referrer,
+                        rooms,
+                        tags,
+                        mid,
+                        tc,
+                        updated_time
+                    } = json;
 
-                if (progress === 1000) {
-                    console.log(count);
-                    progress = 0;
+                    if (progress === 10000) {
+                        console.log(count);
+                        progress = 0;
+                    }
+                    progress++;
+
+                    const deviceId = deviceSet.get(device);
+                    const browserId = browserSet.get(browser);
+                    const osId = osSet.get(os);
+                    const referrerId = referrerSet.get(referrer);
+
+                    // ws.write(`"${count}","${topic_id}","${deviceId}","${browserId}","${osId}","${referrerId}","${tc}","${updated_time}","${mid}","${comment_id}"`);
+                    // ws.write('\n');
+                    stringifier.write([ count, topic_id, deviceId, browserId, osId, referrerId, tc, updated_time, mid, comment_id ]);
+                    count++;
+
+                    // for (const room of rooms) {
+                    //     console.log(roomSet.get(room));
+                    // }
+
+                    // for (const tag of tags) {
+                    //     console.log(tagSet.get(tag));
+                    // }
+                } catch (err) {
+
                 }
-                progress++;
+            });
 
-                const deviceId = deviceSet.get(device);
-                const browserId = browserSet.get(browser);
-                const osId = osSet.get(os);
-                const referrerId = referrerSet.get(referrer);
-
-                // ws.write(`"${count}","${topic_id}","${deviceId}","${browserId}","${osId}","${referrerId}","${tc}","${updated_time}","${mid}","${comment_id}"`);
-                // ws.write('\n');
-                stringifier.write([ count, topic_id, deviceId, browserId, osId, referrerId, tc, updated_time, mid, comment_id ]);
-                count++;
-
-                // for (const room of rooms) {
-                //     console.log(roomSet.get(room));
-                // }
-
-                // for (const tag of tags) {
-                //     console.log(tagSet.get(tag));
-                // }
-            } catch (err) {
-
-            }
-        })
-        .off('close', () => { stringifier.end(); console.log('end'); resolve() });
-    });
+            rl.on('close', () => { console.log('end'); resolve(); });
+        });
+    }
+    stringifier.end(); 
 })();
