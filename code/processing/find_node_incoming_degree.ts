@@ -8,7 +8,7 @@ const INCOMING_THRESHOLD = 10;
     let count = 0;
     let totalCount = 0;
 
-    let ifs = fs.createReadStream(path.resolve(`../data/processed/edges.csv`), {
+    let ifs = fs.createReadStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
         encoding: 'utf-8'
     });
 
@@ -51,7 +51,7 @@ const INCOMING_THRESHOLD = 10;
     // console.log('size: ', nodeSet.size);
     adjMap.clear();
 
-    ifs = fs.createReadStream(path.resolve(`../data/processed/edges.csv`), {
+    ifs = fs.createReadStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
         encoding: 'utf-8'
     });
 
