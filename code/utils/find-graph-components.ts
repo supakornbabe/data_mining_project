@@ -12,6 +12,7 @@ export default function FindGraphComponents(edges: Edge[]): Components[] {
             nodeSet.add(edge.to);
         }
 
+        // convert directed-graph to undirected-graph
         if (graphs.has(edge.from)) {
             const set = graphs.get(edge.from);
             if (set !== undefined) {
@@ -42,7 +43,9 @@ export default function FindGraphComponents(edges: Edge[]): Components[] {
         if (visitedSet.has(node)) {
             return;
         }
-        const curComponent: Edge[] = [];
+        const curComponent: string[] = [ node ];
+        visitedSet.add(node);
+
         const queue = [ node ];
         while (queue.length > 0) {
             // do BFS
@@ -57,23 +60,25 @@ export default function FindGraphComponents(edges: Edge[]): Components[] {
                             return;
                         }
                         visitedSet.add(value);
-                        curComponent.push({ from: fromNode, to: value });
+                        curComponent.push(value);
                         queue.push(value);
                     });
                 }
             }
         }
-        results.push({ edges: curComponent });
+        results.push({ nodes: curComponent });
     });
     
     return results;
 }
 
-FindGraphComponents([
-    { from: '1', to: '2' },
-    { from: '2', to: '3' },
-    { from: '3', to: '1' },
-    { from: '4', to: '5' },
-    { from: '5', to: '6' },
-    { from: '6', to: '4' },
-]).forEach(edge => console.log('result: ', edge));
+// TEST CASE:
+// FindGraphComponents([
+//     { from: '1', to: '2' },
+//     { from: '2', to: '3' },
+//     { from: '3', to: '1' },
+//     { from: '4', to: '5' },
+//     { from: '5', to: '6' },
+//     { from: '6', to: '4' },
+//     { from: '3', to: '4' },
+// ]).forEach(edge => console.log('result: ', edge));

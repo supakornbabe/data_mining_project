@@ -4,5 +4,5 @@ export interface Edge {
 }
 
 export interface Components {
-    edges: Edge[];
+    nodes: string[];
 }

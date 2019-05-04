@@ -1,6 +1,8 @@
 import path from 'path';
 import readline from 'readline';
 import fs from 'fs';
+import { Edge } from '../utils/definitions';
+import FindGraphComponents from '../utils/find-graph-components';
 
 const EDGE_WEIGHT_THRESHOLD = 25;
 
@@ -48,16 +50,15 @@ const EDGE_WEIGHT_THRESHOLD = 25;
     });
 
     let passed = 0;
-
-    console.log('Target,Source');
+    const edges: Edge[] = [];
     edgeMap.forEach((value, key) => {
         if (value >= EDGE_WEIGHT_THRESHOLD) {
-            console.log(key);
+            const splits = key.split(',');
+            edges.push({ from: splits[1], to: splits[0] });
+
             passed++;
             
         }
     });
-
-    // console.log(passed);
-    // console.log(edgeMap.size);
+    FindGraphComponents(edges).forEach(comp => { if (comp.nodes.length >= 3) { console.log(JSON.stringify(comp)); } });
 })();
