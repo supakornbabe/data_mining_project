@@ -22,6 +22,17 @@ export default function FindGraphComponents(edges: Edge[]): Components[] {
             newSet.add(edge.to);
             graphs.set(edge.from, newSet);
         }
+
+        if (graphs.has(edge.to)) {
+            const set = graphs.get(edge.to);
+            if (set !== undefined) {
+                set.add(edge.from);
+            }
+        } else {
+            const newSet = new Set<string>();
+            newSet.add(edge.from);
+            graphs.set(edge.to, newSet);
+        }
     }
 
     const results = new Array<Components>();
@@ -64,5 +75,5 @@ FindGraphComponents([
     { from: '3', to: '1' },
     { from: '4', to: '5' },
     { from: '5', to: '6' },
-    { from: '6', to: '4' }
+    { from: '6', to: '4' },
 ]).forEach(edge => console.log('result: ', edge));
