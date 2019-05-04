@@ -48,6 +48,7 @@ const EDGE_WEIGHT_THRESHOLD = 25;
     });
 
     let passed = 0;
+    console.log('Target,Source');
     edgeMap.forEach((value, key) => {
         if (value >= EDGE_WEIGHT_THRESHOLD) {
             console.log(key);
