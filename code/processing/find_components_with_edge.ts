@@ -4,7 +4,7 @@ import fs from 'fs';
 import { Edge } from '../utils/definitions';
 import FindGraphComponents from '../utils/find-graph-components';
 
-const EDGE_WEIGHT_THRESHOLD = 25;
+const EDGE_WEIGHT_THRESHOLD = 10;
 
 (async function() {
     let count = 0;
@@ -60,5 +60,7 @@ const EDGE_WEIGHT_THRESHOLD = 25;
             
         }
     });
-    FindGraphComponents(edges).forEach(comp => { if (comp.nodes.length >= 3) { console.log(JSON.stringify(comp)); } });
+    const components = FindGraphComponents(edges);
+    components.forEach(comp => { if (comp.nodes.length >= 3) { console.log(JSON.stringify(comp)); } });
+    console.log(components.length);
 })();

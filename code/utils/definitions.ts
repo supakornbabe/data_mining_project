@@ -6,3 +6,7 @@ export interface Edge {
 export interface Components {
     nodes: string[];
 }
+
+export interface ComponentEdges {
+    edges: Edge[];
+};
