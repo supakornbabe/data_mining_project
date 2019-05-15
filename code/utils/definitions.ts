@@ -7,6 +7,6 @@ export interface Components {
     nodes: string[];
 }
 
-export interface ComponentEdges {
+export interface Graph {
     edges: Edge[];
 };

@@ -1,9 +1,21 @@
 import { Edge } from "./definitions";
 import { stringify } from "querystring";
 
-export default function createDirectedGraph(edges: Edge[]): Map<string, Set<string>> {
+
+export interface CreateGraphResult {
+    graphs: Map<string, Set<string>>;
+    nodes: Set<string>;
+}
+
+export default function createDirectedGraph(edges: Edge[], includeNodeSet: boolean = false): CreateGraphResult {
     const graphs = new Map<string, Set<string>>();
+    const nodes = new Set<string>();
+
     for (const edge of edges) {
+        if (includeNodeSet) {
+            nodes.add(edge.from);
+            nodes.add(edge.to);
+        }
         if (graphs.has(edge.from)) {
             const set = graphs.get(edge.from);
             if (set !== undefined) {
@@ -15,12 +27,19 @@ export default function createDirectedGraph(edges: Edge[]): Map<string, Set<stri
             graphs.set(edge.from, set);
         }
     }
-    return graphs;
+    return { graphs, nodes };
 }
 
-export function createUndirectedGraph(edges: Edge[]): Map<string, Set<string>> {
+export function createUndirectedGraph(edges: Edge[], includeNodeSet: boolean = false): CreateGraphResult {
     const graphs = new Map<string, Set<string>>();
+    const nodes = new Set<string>();
+
     for (const edge of edges) {
+        if (includeNodeSet) {
+            nodes.add(edge.from);
+            nodes.add(edge.to);
+        }
+
         if (graphs.has(edge.from)) {
             const set = graphs.get(edge.from);
             if (set !== undefined) {
@@ -43,5 +62,5 @@ export function createUndirectedGraph(edges: Edge[]): Map<string, Set<string>> {
             graphs.set(edge.to, set);
         }
     }
-    return graphs;
+    return { graphs, nodes };
 }
