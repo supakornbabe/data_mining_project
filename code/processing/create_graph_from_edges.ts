@@ -42,11 +42,16 @@ const EDGE_WEIGHT_THRESHOLD = 10;
         rl.on('close', () => { resolve() });
     });
 
+    let max = 0;
     const components = FindComponentsGraph(edges);
     console.log(`Source,Target`);
     components.forEach(comp => {
         if (comp.edges.length >= 2) {
-            comp.edges.forEach(edge => console.log(`${edge.from},${edge.to}`));
+            if (comp.edges.length > max) {
+                max = comp.edges.length;
+            }
+            // comp.edges.forEach(edge => console.log(`${edge.from},${edge.to}`));
         }
     });
+    console.log(max);
 })();
