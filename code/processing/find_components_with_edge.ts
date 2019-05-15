@@ -2,7 +2,7 @@ import path from 'path';
 import readline from 'readline';
 import fs from 'fs';
 import { Edge } from '../utils/definitions';
-import FindGraphComponents from '../utils/find-graph-components';
+import FindGraphComponents, { FindComponentsGraph } from '../utils/find-graph-components';
 
 const EDGE_WEIGHT_THRESHOLD = 10;
 
@@ -10,7 +10,7 @@ const EDGE_WEIGHT_THRESHOLD = 10;
     let count = 0;
     let totalCount = 0;
 
-    let ifs = fs.createReadStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
+    let ifs = fs.createReadStream(path.resolve(`../data/processed/edge_incoming_10_with_comid_0.csv`), {
         encoding: 'utf-8'
     });
 
@@ -60,7 +60,18 @@ const EDGE_WEIGHT_THRESHOLD = 10;
             
         }
     });
-    const components = FindGraphComponents(edges);
-    components.forEach(comp => { if (comp.nodes.length >= 3) { console.log(JSON.stringify(comp)); } });
-    console.log(components.length);
+
+    let c = 0;
+    const components = FindComponentsGraph(edges);
+    components.forEach(comp => {
+        if (comp.edges.length >= 2) {
+            comp.edges.forEach(edge => console.log(edge));
+            c++;
+            console.log("\n");
+        }
+    });
+    console.log(c);
+    // const components = FindGraphComponents(edges);
+    // components.forEach(comp => { if (comp.nodes.length >= 3) { console.log(JSON.stringify(comp)); } });
+    // console.log(components.length);
 })();

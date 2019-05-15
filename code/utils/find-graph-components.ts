@@ -119,15 +119,15 @@ export function FindComponentsGraph(edges: Edge[]): Graph[] {
 //     { from: '3', to: '4' },
 // ]).forEach(edge => console.log('result: ', edge));
 
-FindComponentsGraph([
-    { from: '1', to: '2' },
-    { from: '2', to: '3' },
-    { from: '3', to: '1' },
-    { from: '4', to: '5' },
-    { from: '5', to: '6' },
-    { from: '6', to: '4' },
-    // { from: '1', to: '4' },
-]).forEach(comp => {
-    comp.edges.forEach(edge => console.log(edge))
-    console.log('\nnext\n');
-});
+// FindComponentsGraph([
+//     { from: '1', to: '2' },
+//     { from: '2', to: '3' },
+//     { from: '3', to: '1' },
+//     { from: '4', to: '5' },
+//     { from: '5', to: '6' },
+//     { from: '6', to: '4' },
+//     // { from: '1', to: '4' },
+// ]).forEach(comp => {
+//     comp.edges.forEach(edge => console.log(edge))
+//     console.log('\nnext\n');
+// });
