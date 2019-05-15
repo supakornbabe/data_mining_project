@@ -1,6 +1,8 @@
 import path from 'path';
 import readline from 'readline';
 import fs from 'fs';
+import { Edge } from '../utils/definitions';
+import FindGraphComponents, { FindComponentsGraph } from '../utils/find-graph-components';
 
 const EDGE_WEIGHT_THRESHOLD = 10;
 
@@ -8,7 +10,7 @@ const EDGE_WEIGHT_THRESHOLD = 10;
     let count = 0;
     let totalCount = 0;
 
-    let ifs = fs.createReadStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
+    let ifs = fs.createReadStream(path.resolve(`../data/processed/pantip_incoming_10.csv`), {
         encoding: 'utf-8'
     });
 
@@ -17,7 +19,7 @@ const EDGE_WEIGHT_THRESHOLD = 10;
         terminal: false
     });
 
-    const edgeMap = new Map<string, number>();
+    const edges: Edge[] = [];
     await new Promise(function(resolve, reject) {
         rl.on('line', function(line) {
             if (count == 1000) {
@@ -34,29 +36,17 @@ const EDGE_WEIGHT_THRESHOLD = 10;
                 return;
             }
 
-            const key = `${splits[0]},${splits[1]}`;
-
-            if (edgeMap.has(key)) {
-                const weight = edgeMap.get(key) || 0;
-                edgeMap.set(key, weight + 1);
-            } else {
-                edgeMap.set(key, 1);
-            }
+            edges.push({ from: splits[1], to: splits[0] });
         });
 
         rl.on('close', () => { resolve() });
     });
 
-    let passed = 0;
-
-    console.log('Target,Source');
-    edgeMap.forEach((value, key) => {
-        if (value >= EDGE_WEIGHT_THRESHOLD) {
-            console.log(key);
-            passed++;
+    const components = FindComponentsGraph(edges);
+    console.log(`Source,Target`);
+    components.forEach(comp => {
+        if (comp.edges.length >= 2) {
+            comp.edges.forEach(edge => console.log(`${edge.from},${edge.to}`));
         }
     });
-
-    // console.log(passed);
-    // console.log(edgeMap.size);
 })();
