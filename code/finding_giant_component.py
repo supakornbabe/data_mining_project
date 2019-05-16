@@ -28,11 +28,18 @@ def main():
     graph_components = sorted(graph_components, key=len, reverse=True)
 
     giant_component =  di_graph.subgraph(graph_components[0].nodes())
-    
-    print("Source,Target")
-    for edge in giant_component.edges():
-        (src, dest) = edge
-        print("%s,%s" % (src, dest))
+
+    max_size = 0
+    for com in list(nx.algorithms.community.k_clique_communities(giant_component.to_undirected(), 3)):
+        if len(com) > max_size:
+            max_size = len(com)
+        print(com)
+    print(max_size)
+
+    # print("Source,Target")
+    # for edge in giant_component.edges():
+    #     (src, dest) = edge
+    #     print("%s,%s" % (src, dest))
 
 
 if __name__ == "__main__":
