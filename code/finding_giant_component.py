@@ -29,12 +29,18 @@ def main():
 
     giant_component =  di_graph.subgraph(graph_components[0].nodes())
 
-    max_size = 0
+    # max_size = 0
+    # for com in list(nx.algorithms.community.k_clique_communities(giant_component.to_undirected(), 3)):
+    #     if len(com) > max_size:
+    #         max_size = len(com)
+    # print(max_size)
+
+    print("Source,Target")
     for com in list(nx.algorithms.community.k_clique_communities(giant_component.to_undirected(), 3)):
-        if len(com) > max_size:
-            max_size = len(com)
-        print(com)
-    print(max_size)
+        if len(com) == 33:
+            for edge in di_graph.subgraph(com).edges():
+                (src, dest) = edge
+                print("%s,%s" % (src, dest))
 
     # print("Source,Target")
     # for edge in giant_component.edges():
