@@ -1,5 +1,6 @@
 import networkx as nx
 
+from operator import itemgetter
 from pathlib import Path
 
 def main():
@@ -28,11 +29,17 @@ def main():
     graph_components = sorted(graph_components, key=len, reverse=True)
 
     giant_component =  di_graph.subgraph(graph_components[0].nodes())
+    betweeness = sorted(nx.edge_betweenness_centrality(giant_component).items(), key=itemgetter(1), reverse=True)
+    
+    for bet in betweeness:
+        print("%s: %s" % bet)
 
-    print("Source,Target")
-    for edge in giant_component.edges():
-        (src, dest) = edge
-        print("%s,%s" % (src, dest))
+    # print("Source,Target")
+    # for com in list(nx.algorithms.community.k_clique_communities(giant_component.to_undirected(), 3)):
+    #     if len(com) == 33:
+    #         for edge in di_graph.subgraph(com).edges():
+    #             (src, dest) = edge
+    #             print("%s,%s" % (src, dest))
 
 if __name__ == "__main__":
     main()

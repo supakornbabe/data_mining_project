@@ -1,5 +1,7 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 
+from operator import itemgetter
 from pathlib import Path
 
 def main():
@@ -28,11 +30,9 @@ def main():
     graph_components = sorted(graph_components, key=len, reverse=True)
 
     giant_component =  di_graph.subgraph(graph_components[0].nodes())
-
-    print("Source,Target")
-    for edge in giant_component.edges():
-        (src, dest) = edge
-        print("%s,%s" % (src, dest))
+    nx.draw(giant_component)
+    plt.show()
+    # plt.draw()
 
 if __name__ == "__main__":
     main()
