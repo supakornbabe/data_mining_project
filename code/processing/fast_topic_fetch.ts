@@ -39,7 +39,7 @@ function fetchTopic(topicId): Promise<string> {
 }
 
 (async function() {
-    // const ows = fs.createWriteStream(DESTINATION_FILE, { encoding: 'utf-8' });
+    const ows = fs.createWriteStream(DESTINATION_FILE, { encoding: 'utf-8' });
 
     const topics: string[] = [];
     await (function() {
@@ -68,10 +68,13 @@ function fetchTopic(topicId): Promise<string> {
         index += fetchSize;
 
         const result = await Promise.all(fetchPromises);
-        console.log(result);
+        for (const res of result) {
+            ows.write(res);
+            ows.write("\n");
+        }
 
         await delay(5);
     }
 
-    // ows.end();
+    ows.end();
 })();
