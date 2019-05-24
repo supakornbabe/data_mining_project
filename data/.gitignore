@@ -1,5 +1,7 @@
 *.json
 *.csv
 *.txt
+*.zip
 processed/
 !processed_except/*.csv
+!processed_except/*.json
