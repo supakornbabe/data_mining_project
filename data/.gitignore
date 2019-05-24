@@ -5,3 +5,5 @@
 processed/
 !processed_except/*.csv
 !processed_except/*.json
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*

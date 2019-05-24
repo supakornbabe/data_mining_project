@@ -15,7 +15,8 @@ except:
 
 
 # %%
-stopwords.words('thai')
+if 'ไป' in stopwords.words('thai'):
+    print('yes')
 
 # %%
 text1 = "[CR] :: รีวิว [Mr.Bew Za] พาไปตะลุย HongKong Disneyland Full Day :: [ตอนพิเศษ]"
