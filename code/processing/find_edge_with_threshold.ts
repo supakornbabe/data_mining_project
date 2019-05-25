@@ -8,7 +8,7 @@ const EDGE_WEIGHT_THRESHOLD = 10;
     let count = 0;
     let totalCount = 0;
 
-    let ifs = fs.createReadStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
+    let ifs = fs.createReadStream(path.resolve(`../data/processed_except/edges_with_condition.csv`), {
         encoding: 'utf-8'
     });
 
@@ -52,7 +52,7 @@ const EDGE_WEIGHT_THRESHOLD = 10;
     console.log('Target,Source');
     edgeMap.forEach((value, key) => {
         if (value >= EDGE_WEIGHT_THRESHOLD) {
-            console.log(key);
+            console.log(`${key},${value}`);
             passed++;
         }
     });
