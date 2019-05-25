@@ -5,7 +5,7 @@ import readline from 'readline';
 
 const SOURCE_FILE = '../data/processed_except/all_topic_id.csv';
 const DESTINATION_FILE = 'test.csv';
-const CONCURRENT_LIMIT = 10;
+const CONCURRENT_LIMIT = 100;
 
 function delay(ms) {
     return new Promise((resolve, reject) => {
