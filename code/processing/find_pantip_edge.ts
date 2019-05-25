@@ -5,7 +5,7 @@ import fs from 'fs';
 (async function() {
 
     let count = 1;
-    const ws = fs.createWriteStream(path.resolve(`../data/processed/edges_with_condition.csv`), {
+    const ws = fs.createWriteStream(path.resolve(`../data/edges_with_condition.csv`), {
         encoding: 'utf-8'
     });
 

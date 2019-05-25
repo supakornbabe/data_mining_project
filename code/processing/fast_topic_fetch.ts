@@ -3,8 +3,8 @@ import fetch from 'node-fetch';
 import path from 'path';
 import readline from 'readline';
 
-const SOURCE_FILE = '../data/processed_except/all_topic_id.csv';
-const DESTINATION_FILE = 'test.csv';
+const SOURCE_FILE = '../data/all_topic_id.csv';
+const DESTINATION_FILE = '../data/all_topic_string.json';
 const CONCURRENT_LIMIT = 100;
 
 function delay(ms) {

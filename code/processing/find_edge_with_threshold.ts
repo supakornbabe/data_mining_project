@@ -8,13 +8,17 @@ const EDGE_WEIGHT_THRESHOLD = 10;
     let count = 0;
     let totalCount = 0;
 
-    let ifs = fs.createReadStream(path.resolve(`../data/processed_except/edges_with_condition.csv`), {
+    let ifs = fs.createReadStream(path.resolve(`../data/edges_with_condition.csv`), {
         encoding: 'utf-8'
     });
 
     let rl = readline.createInterface({
         input: ifs,
         terminal: false
+    });
+
+    let ofs = fs.createWriteStream(path.resolve(`../data/pantip_edge_10_with_weight.csv`), {
+        encoding: 'utf-8'
     });
 
     const edgeMap = new Map<string, number>();
@@ -49,14 +53,14 @@ const EDGE_WEIGHT_THRESHOLD = 10;
 
     let passed = 0;
 
-    console.log('Target,Source');
+    ofs.write('Target,Source');
+    ofs.write("\n");
     edgeMap.forEach((value, key) => {
         if (value >= EDGE_WEIGHT_THRESHOLD) {
-            console.log(`${key},${value}`);
+            ofs.write(`${key},${value}`);
+            ofs.write("\n");
             passed++;
         }
     });
-
-    // console.log(passed);
-    // console.log(edgeMap.size);
+    ofs.close();
 })();

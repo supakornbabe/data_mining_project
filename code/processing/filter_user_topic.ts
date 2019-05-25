@@ -8,7 +8,7 @@ const USER_TOPICS_THRESHOLD = 10;
 
     const countMap = new Map<string, number>();
     await (async function() {
-        const ifs = fs.createReadStream(path.resolve(`../data/processed_except/user_topics.1.csv`), {
+        const ifs = fs.createReadStream(path.resolve(`../data/user_topics.csv`), {
             encoding: 'utf-8'
         });
     
@@ -51,7 +51,7 @@ const USER_TOPICS_THRESHOLD = 10;
     });
 
     await (async function() {
-        const ifs = fs.createReadStream(path.resolve(`../data/processed_except/user_topics.1.csv`), {
+        const ifs = fs.createReadStream(path.resolve(`../data/user_topics.csv`), {
             encoding: 'utf-8'
         });
     
@@ -59,17 +59,24 @@ const USER_TOPICS_THRESHOLD = 10;
                 input: ifs,
                 terminal: false
         });
-    
-        console.log("Source,Target");
+
+        const ofs = fs.createWriteStream(path.resolve(`../data/user_topic_filtered.csv`), {
+            encoding: 'utf-8'
+        });
+
+        ofs.write("Source,Target");
+        ofs.write("\n");
         await new Promise((resolve, reject) => {
             rl.on('line', line => {
                 const splits = line.split(',');
                 if (validSet.has(splits[1])) {
-                    console.log(line);
+                    ofs.write(line);
+                    ofs.write("\n");
                 }
             });
     
             rl.on('close', () => { resolve(); });
         });
+        ofs.close();
     })();
 })();
