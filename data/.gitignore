@@ -7,3 +7,4 @@ processed/
 !processed_except/*.json
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+!all_topic_string.json
